@@ -1,0 +1,21 @@
+body {
+  margin: auto;
+  width: 960px;
+  background-image: url("train2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+h1 {
+  text-align: center;
+  color: silver;
+}
+
+.card-header {
+  text-align: center;
+}
+
+.card-header,
+.card-body {
+  border: 1px solid silver;
+}
