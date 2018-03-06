@@ -1,4 +1,7 @@
-//----------------connect to firebase----------------------------
+//--------------------moment JS display current time--------------
+$("#currentTime").html("Current Time: " + moment().format("hh:mm"));
+
+//-----------------initialize firebase----------------------------
 var config = {
   apiKey: "AIzaSyDfgw6c2-2n39tTs_BDdc4Z-Z78A3k6E6o",
   authDomain: "train-schedule-ff82d.firebaseapp.com",
@@ -9,12 +12,9 @@ var config = {
 };
 firebase.initializeApp(config);
 
-//----------------------------global variables-------------------
+//------------------global variables-----------------------------
 var DATA = firebase.database();
 var now = moment();
-console.log(now.diff(4));
-
-console.log(now.format("LL"));
 
 //-------onclick event for submit button, grab input-------------
 $(document).on("click", "#submit", function() {
@@ -60,7 +60,7 @@ DATA.ref()
     $(".output").append(tableRow);
   });
 
-// //---------------------------require user input----------------------------
+//---------------------------require user input----------------------------
 // function requireInput() {
 //   if ((trainName = "")) {
 //     alert("Please input train name.");
