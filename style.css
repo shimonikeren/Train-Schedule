@@ -1,9 +1,12 @@
 body {
   margin: auto;
-  width: 960px;
   background-image: url("train2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+#header {
+  padding: 25px;
 }
 
 h1,
@@ -14,9 +17,14 @@ h4 {
 
 .card-header {
   text-align: center;
+  font-weight: bold;
 }
 
 .card-header,
 .card-body {
   border: 1px solid silver;
+}
+
+td {
+  text-align: center;
 }

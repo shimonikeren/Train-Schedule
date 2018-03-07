@@ -1,5 +1,5 @@
-//--------------------moment JS display current time--------------
-$("#currentTime").html("Current Time: " + moment().format("hh:mm"));
+//------------moment JS display current time in html--------------
+$("#currentTime").html("Current Time: " + moment().format("LT"));
 
 //-----------------initialize firebase----------------------------
 var config = {
@@ -14,11 +14,10 @@ firebase.initializeApp(config);
 
 //------------------global variables-----------------------------
 var DATA = firebase.database();
-var now = moment();
 
-//-------onclick event for submit button, grab input-------------
+//-----------------------submit onclick--------------------------
+//require input,grab info,make object var,push to db,clear form
 $(document).on("click", "#submit", function() {
-  //requireInput(); //this isn't working right now
   var name = $("#trainName")
     .val()
     .trim();
@@ -28,54 +27,67 @@ $(document).on("click", "#submit", function() {
   var firstTrain = $("#firstTrain")
     .val()
     .trim();
-  var frequency = $("#frequeny")
+  var frequency = $("#frequency")
     .val()
     .trim();
-  trainFunction(name, destination, firstTrain, frequency);
+  //require user input to move forward with function
+  if (name === "") {
+    alert("Please Input Train Name.");
+    return false;
+  }
+  if (destination === "") {
+    alert("Please Input Train Destination.");
+    return false;
+  }
+  if (firstTrain === "") {
+    alert("Please Input First Train Time.");
+    return false;
+  }
+  if (frequency === "") {
+    alert("Please Input Frequency (Minutes) of Train.");
+    return false;
+  }
+  //object var to push to db
+  var newTrain = {
+    name: name,
+    destination: destination,
+    firstTrain: firstTrain,
+    frequency: frequency,
+    dateEntered: firebase.database.ServerValue.TIMESTAMP,
+  };
+  //push data to database
+  DATA.ref().push(newTrain);
+  //clear form
+  $("#trainName").val("");
+  $("#destination").val("");
+  $("#firstTrain").val("");
+  $("#frequency").val("");
+
+  return false;
 });
 
-//-------function: push object to firebase database--------------
-//----------------------include TIMESTAMP------------------------
-function trainFunction(someName, dest, first, freq) {
-  DATA.ref().push({
-    name: someName,
-    destination: dest,
-    firstTrain: first,
-    frequency: freq,
-    dateEntered: firebase.database.ServerValue.TIMESTAMP,
-  });
-}
-
-//---sort data by dateEntered, limit number of inputs, onclick, append to page---
+//-----db storage, calculate trains, append to page on table-----
 DATA.ref()
   .orderByChild("dateEntered")
-  .limitToLast(1)
   .on("child_added", function(snapshot) {
+    //variables
+    var name = snapshot.val().name;
+    var destination = snapshot.val().destination;
+    var frequency = snapshot.val().frequency;
+    var firstTrain = snapshot.val().firstTrain;
+    //calculations using moment.js methods
+    var firstTimeConverted = moment(firstTrain, "LT").subtract(1, "years"); //to make train be in the PAST
+    var timeDiff = moment().diff(moment(firstTimeConverted), "minutes");
+    var timeApart = timeDiff % frequency;
+    var minNextTrain = frequency - timeApart;
+    var nextTrain = moment().add(minNextTrain, "minutes");
+    var nextArriving = moment(nextTrain).format("LT");
+    //add table row and table datas to table body
     var tableRow = $("<tr>");
-    tableRow.append(`<td>${snapshot.val().name}</td>`);
-    tableRow.append(`<td>${snapshot.val().destination}</td>`);
-    tableRow.append(`<td>${snapshot.val().frequency}</td>`);
-    tableRow.append(`<td>${" "}</td>`);
-    tableRow.append(`<td>${" "}</td>`);
-    $(".output").append(tableRow);
+    tableRow.append(`<td>${name}</td>`);
+    tableRow.append(`<td>${destination}</td>`);
+    tableRow.append(`<td>${frequency}</td>`);
+    tableRow.append(`<td>${nextArriving}</td>`);
+    tableRow.append(`<td>${minNextTrain}</td>`);
+    $(".tableBody").append(tableRow);
   });
-
-//---------------------------require user input----------------------------
-// function requireInput() {
-//   if ((trainName = "")) {
-//     alert("Please input train name.");
-//     return false;
-//   }
-//   if ((destination = "")) {
-//     alert("Please input Destination.");
-//     return false;
-//   }
-//   if ((firstTrain = "")) {
-//     alert("Please input first train time.");
-//     return false;
-//   }
-//   if ((freq = "")) {
-//     alert("Please input frequency.");
-//     return false;
-//   }
-// }

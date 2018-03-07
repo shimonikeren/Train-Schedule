@@ -3,28 +3,23 @@
 
 <head>
     <title>Train-Schedule</title>
-    <!--link jQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <!--link bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-    <!--link css-->
     <link rel="stylesheet" type="text/css" href="style.css">
-    <!--link firebase-->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    <!--link momentJS-->
     <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
 </head>
 
 <body>
-
-    <h1 class="display-4">Train Schedule</h1>
-    <h4 id="currentTime"></h4>
+    <div id="header">
+        <h1 class="display-4">Train Schedule</h1>
+        <h4 id="currentTime"></h4>
+    </div>
 
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-
                 <div class="card rounded-0">
                     <div class="card-header">
                         Add Train
@@ -45,7 +40,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput">Frequency (Minutes)</label>
-                                <input type="text" class="form-control" id="frequeny">
+                                <input type="text" class="form-control" id="frequency">
                             </div>
                             <div>
                                 <button type="button" class="btn btn-secondary rounded-0" id="submit">Submit</button>
@@ -54,9 +49,6 @@
                     </div>
                 </div>
             </div>
-
-            <br>
-            <br>
 
             <div class="col-sm-8">
                 <div class="card rounded-0">
@@ -69,21 +61,18 @@
                                 <tr>
                                     <th scope="col">Train Name</th>
                                     <th scope="col">Destination</th>
-                                    <th scope="col">Frequency (Minutes)</th>
+                                    <th scope="col">Frequency (Mins)</th>
                                     <th scope="col">Next Arrival</th>
                                     <th scope="col">Minutes Away</th>
                                 </tr>
                             </thead>
-                            <tbody class="output">
+                            <tbody class="tableBody">
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
-        <br>
-        <br>
 </body>
 
 <script src="logic.js"></script>
